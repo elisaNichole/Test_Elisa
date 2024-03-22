@@ -1,28 +1,28 @@
 const { test, expect } = require('@playwright/test');
-const { WordlePage } = require('../pageObjects/wordleHomepage/WordleHomepage');
+const { BASE_URL, PAGE_TITLE } = require('./constants');
+const { HomePage } = require('../pageObjects/HomePage');
+const { ResultPage } = require('../pageObjects/ResultPage');
 
 test.describe('WA_002 Win Wordle Game Test', () => {
-    let wordlePage;
-    var expectedMessageFirstLine = 'You Win!';
-    var expectedMessageSecondLine = 'The word was: ccccc';
-    var expectedMessageThirdLine = 'You found the solution in 3 guesses :)';
+    let homePage;
+    let resultPage;
+    const expectedMessageFirstLine = 'You Win!';
+    const expectedMessageSecondLine = 'The word was: ccccc';
+    const expectedMessageThirdLine = 'You found the solution in 3 guesses :)';
 
-    test.beforeEach(async ({
-        page
-    }) => {
-        wordlePage = new WordlePage(page);
-        await page.goto('http://localhost:3000/?test=ccccc');
-        await expect(page).toHaveTitle(/React App/);
+    test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
+        resultPage = new ResultPage(page);
+        await page.goto(BASE_URL + '?test=ccccc');
+        await expect(page).toHaveTitle(PAGE_TITLE);
     });
 
-    test('you win message displays', async ({
-        page
-    }) => {
-        await wordlePage.enterLetterInBox(1, 0);
-        await wordlePage.enterLetterInBox(2, 1);
-        await wordlePage.enterLetterInBox(3, 2);
-        await expect(await wordlePage.getPopUpMessageFirstLineOfText()).toEqual(expectedMessageFirstLine);
-        await expect(await wordlePage.getPopUpMessageSecondLineOfText()).toEqual(expectedMessageSecondLine);
-        await expect(await wordlePage.getPopUpMessageThirdLineOfText()).toEqual(expectedMessageThirdLine);
+    test('you win message displays', async ({ page }) => {
+        await homePage.enterLetterInBox(1, 0);
+        await homePage.enterLetterInBox(2, 1);
+        await homePage.enterLetterInBox(3, 2);
+        expect(await resultPage.getPopUpMessageFirstLineOfText()).toEqual(expectedMessageFirstLine);
+        expect(await resultPage.getPopUpMessageSecondLineOfText()).toEqual(expectedMessageSecondLine);
+        expect(await resultPage.getPopUpMessageThirdLineOfText()).toEqual(expectedMessageThirdLine);
     });
 });

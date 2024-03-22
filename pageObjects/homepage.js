@@ -1,29 +1,18 @@
 const { expect } = require('@playwright/test');
 
-exports.WordlePage = class WordlePage {
-
-    /**
-     * @param {import('@playwright/test').Page} page
-     */
+export class HomePage {
 
     constructor(page) {
         this.page = page;
     }
 
     async enterLetterInBox(row, letterPosition) {
-        const LETTERS = [
-            'a',
-            'b',
-            'c',
-            'd',
-            'e',
-            'f'
-        ];
+        const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f'];
         this.row = row;
         this.letterPosition = letterPosition;
         let div = 1;
         for (let i = 0; i < 5; i++) {
-            var boxLocator = `//div[${row}][contains(@class,"row")]/div[${div}]`;
+            const boxLocator = `//div[${row}][contains(@class,"row")]/div[${div}]`;
             await this.page.locator(boxLocator, row, div).type(LETTERS[letterPosition]);
             div++;
         }

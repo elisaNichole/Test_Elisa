@@ -1,31 +1,31 @@
 const { test, expect } = require('@playwright/test');
-const { WordlePage } = require('../pageObjects/wordleHomepage/WordleHomepage');
+const { BASE_URL, PAGE_TITLE } = require('./constants');
+const { HomePage } = require('../pageObjects/HomePage');
+const { ResultPage } = require('../pageObjects/ResultPage');
 
 test.describe('WA_001 Loose Wordle Game Test', () => {
-    let wordlePage;
-    var expectedMessageFirstLine = 'Sorry, you loose!';
-    var expectedMessageSecondLine = 'The word was:';
-    var expectedMessageThirdLine = 'Better luck next time :)';
+    let homePage;
+    let resultPage;
+    const expectedMessageFirstLine = 'Sorry, you loose!';
+    const expectedMessageSecondLine = 'The word was:';
+    const expectedMessageThirdLine = 'Better luck next time :)';
 
-    test.beforeEach(async ({
-        page
-    }) => {
-        wordlePage = new WordlePage(page);
-        await page.goto('http://localhost:3000/');
-        await expect(page).toHaveTitle(/React App/);
+    test.beforeEach(async ({ page }) => {
+        homePage = new HomePage(page);
+        resultPage = new ResultPage(page);
+        await page.goto(BASE_URL);
+        await expect(page).toHaveTitle(PAGE_TITLE);
     });
 
-    test('you loose message displays', async ({
-        page
-    }) => {
-        await wordlePage.enterLetterInBox(1, 0);
-        await wordlePage.enterLetterInBox(2, 1);
-        await wordlePage.enterLetterInBox(3, 2);
-        await wordlePage.enterLetterInBox(4, 3);
-        await wordlePage.enterLetterInBox(5, 4);
-        await wordlePage.enterLetterInBox(6, 5);
-        await expect(await wordlePage.getPopUpMessageFirstLineOfText()).toEqual(expectedMessageFirstLine);
-        await expect(await wordlePage.getPopUpMessageSecondLineOfText()).toContain(expectedMessageSecondLine);
-        await expect(await wordlePage.getPopUpMessageThirdLineOfText()).toEqual(expectedMessageThirdLine);
+    test('you loose message displays', async ({ page }) => {
+        await homePage.enterLetterInBox(1, 0);
+        await homePage.enterLetterInBox(2, 1);
+        await homePage.enterLetterInBox(3, 2);
+        await homePage.enterLetterInBox(4, 3);
+        await homePage.enterLetterInBox(5, 4);
+        await homePage.enterLetterInBox(6, 5);
+        expect(await resultPage.getPopUpMessageFirstLineOfText()).toEqual(expectedMessageFirstLine);
+        expect(await resultPage.getPopUpMessageSecondLineOfText()).toContain(expectedMessageSecondLine);
+        expect(await resultPage.getPopUpMessageThirdLineOfText()).toEqual(expectedMessageThirdLine);
     });
 });
