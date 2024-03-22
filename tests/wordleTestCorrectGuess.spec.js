@@ -9,6 +9,8 @@ test.describe('WA_002 Win Wordle Game Test', () => {
     const expectedMessageFirstLine = 'You Win!';
     const expectedMessageSecondLine = 'The word was: ccccc';
     const expectedMessageThirdLine = 'You found the solution in 3 guesses :)';
+    const grey = ["grey", "grey", "grey", "grey", "grey"];
+    const green = ["green", "green", "green", "green", "green"];
 
     test.beforeEach(async ({ page }) => {
         homePage = new HomePage(page);
@@ -21,6 +23,9 @@ test.describe('WA_002 Win Wordle Game Test', () => {
         await homePage.enterLetterInBox(1, 0);
         await homePage.enterLetterInBox(2, 1);
         await homePage.enterLetterInBox(3, 2);
+        expect(await homePage.getBoxColorByRow(1)).toEqual(grey);
+        expect(await homePage.getBoxColorByRow(2)).toEqual(grey);
+        expect(await homePage.getBoxColorByRow(3)).toEqual(green);
         expect(await resultPage.getPopUpMessageFirstLineOfText()).toEqual(expectedMessageFirstLine);
         expect(await resultPage.getPopUpMessageSecondLineOfText()).toEqual(expectedMessageSecondLine);
         expect(await resultPage.getPopUpMessageThirdLineOfText()).toEqual(expectedMessageThirdLine);

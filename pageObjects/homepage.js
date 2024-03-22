@@ -30,4 +30,17 @@ export class HomePage {
     async getPopUpMessageThirdLineOfText() {
         return await this.page.locator('//div[@class="modal"]//p[2]').textContent();
     }
+
+    async getBoxColorByRow(row){
+        this.row = row;
+        let div = 1;
+        const colors = [];
+        for (let i = 0; i < 5; i++) {
+            const locator = `//div[${row}][contains(@class,"row past")]/div[${div}]`;
+            const color = await this.page.locator(locator, row, div).getAttribute("class");
+            colors.push(color);
+            div++;
+        }
+        return colors;
+    }
 }
